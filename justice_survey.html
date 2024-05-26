@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Justice Opinion Survey</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .question { margin-bottom: 20px; }
+        .result { margin-top: 20px; font-size: 24px; color: green; }
+    </style>
+</head>
+<body>
+    <h1>나의 정의관 테스트</h1>
+    <form id="justiceSurvey">
+        <!-- Questions will be inserted here by JavaScript -->
+    </form>
+    <div class="result" id="result"></div>
+
+    <script>
+        const questions = [
+            { text: "나는 결과가 동기보다 중요하다고 생각한다.", cat: ['utilitarianism', 'deontology'] },
+            { text: "나는 범죄자에게 사회적 유용성을 고려하여 처벌을 결정해야 한다고 생각한다.", cat: ['utilitarianism', 'deontology'] },
+            { text: "나는 개인의 행복과 관계없이 윤리적으로 정해진 행위를 해야 한다고 생각한다.", cat: ['deontology', 'utilitarianism'] },
+            { text: "나는 거짓말이 언제나 나쁘다고 생각한다.", cat: ['deontology', 'utilitarianism'] },
+            { text: "나는 더 큰 선을 위해서라면 약속을 어겨도 괜찮다고 생각한다.", cat: ['utilitarianism', 'deontology'] },
+            { text: "나는 특정 집단에 소속되어 있을 때 더 안정감을 느낀다.", cat: ['communitarianism', 'liberalism'] },
+            { text: "나는 개인의 자유가 보장된 자유 경쟁이 합리적인 결과를 낳는다고 생각한다.", cat: ['liberalism', 'communitarianism'] },
+            { text: "나는 국가는 국민의 자유와 권리를 보호하는 수단으로써 존재한다고 생각한다.", cat: ['liberalism', 'communitarianism'] },
+            { text: "나는 개인의 자유와 권리 보장에 우선적 가치를 부여해야 한다고 생각한다.", cat: ['liberalism', 'communitarianism'] },
+            { text: "나는 사회적, 경제적 불평등 문제 해결에 국가보다 개인의 노력이 우선시되어야 한다고 생각한다.", cat: ['liberalism', 'communitarianism'] },
+            { text: "나는 국가 간의 이해관계가 조화로울 수 있어 평화가 가능하다고 생각한다.", cat: ['idealism', 'realism'] },
+            { text: "나는 과거가 아닌 미래에 대해 주로 생각하며, 인과적으로 사고하기보다는 창조적으로 사고한다.", cat: ['idealism', 'realism'] },
+            { text: "나는 국제관계를 가치관을 배제하고 객관적으로 분석하려고 한다.", cat: ['realism', 'idealism'] },
+            { text: "나는 현실 세계를 궁극적 가치나 초월적 이념과 연결지어 의미를 부여한다.", cat: ['idealism', 'realism'] },
+            { text: "나는 예술의 목적이 단순한 모방이 아닌, 불완전한 자연을 이상화시켜 완성하는 데 있다고 생각한다.", cat: ['idealism', 'realism'] },
+            { text: "나는 개인의 노력으로 가난을 극복할 수 있다고 생각한다.", cat: ['functionalism', 'conflictTheory'] },
+            { text: "고연봉자들은 사회에서 그만큼 중요한 일을 하기 때문에 그 대가를 받는 것이다.", cat: ['functionalism', 'conflictTheory'] },
+            { text: "나는 교육 시스템이 모든 학생에게 공평한 기회를 제공한다고 생각한다.", cat: ['functionalism', 'conflictTheory'] },
+            { text: "경제적 불평등은 사회 구조적 문제이다.", cat: ['conflictTheory', 'functionalism'] },
+            { text: "나는 법과 제도가 사회의 기득권층이 자신들의 지위를 유지하기 위해 사용하는 도구라고 생각한다.", cat: ['conflictTheory', 'functionalism'] }
+        ];
+
+        const surveyForm = document.getElementById('justiceSurvey');
+        questions.forEach((q, i) => {
+            const qElement = document.createElement('div');
+            qElement.className = 'question';
+            qElement.innerHTML = `<label>${i + 1}. ${q.text}</label><br>` +
+                                 `<label><input type="radio" name="q${i}" value="0"> Yes</label>` +
+                                 `<label><input type="radio" name="q${i}" value="1"> No</label>`;
+            surveyForm.appendChild(qElement);
+        });
+
+        surveyForm.innerHTML += '<button type="button" onclick="calculateResults()">Submit</button>';
+
+        function calculateResults() {
+            const scores = {
+                utilitarianism: 0, deontology: 0,
+                communitarianism: 0, liberalism: 0,
+                idealism: 0, realism: 0,
+                functionalism: 0, conflictTheory: 0
+            };
+            questions.forEach((q, i) => {
+                const answer = document.querySelector(`input[name="q${i}"]:checked`);
+                if (answer) {
+                    scores[q.cat[answer.value]]++;
+                }
+            });
+
+            const result = (scores.utilitarianism > scores.deontology ? 'U' : 'D') +
+                           (scores.communitarianism > scores.liberalism ? 'C' : 'L') +
+                           (scores.idealism > scores.realism ? 'I' : 'R') +
+                           (scores.functionalism > scores.conflictTheory ? 'F' : 'C');
+            document.getElementById('result').textContent = `당신의 정의관 유형은: ${result}`;
+        }
+    </script>
+</body>
+</html>
